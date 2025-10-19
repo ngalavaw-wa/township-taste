@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Township Taste - Menu</title>
+    <link rel="stylesheet" href="HomePage Design.css" />
+    <link rel="stylesheet" href="MenuPage Design.css" />
+    <style>
+        .menu-layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .menu-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 250px;
+        }
+
+            .menu-side img {
+                width: 100%;
+                border-radius: 10px;
+                height: 180px;
+                object-fit: cover;
+            }
+
+        .menu-section {
+            flex: 2;
+            min-width: 350px;
+        }
+
+        .menu-side figcaption {
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0,0,0,0.6);
+            padding: 5px 0;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Home Page.html">Home</a>
+            <a href="Menu.html" class="active">Menu</a>
+            <a href="Checkout.html">Checkout</a>
+            <a href="ContactPage.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="menu-header">
+            <img src="imagess/logo.jpg" class="menu-logo" alt="Township Taste Logo">
+            <h1 class="page-title">Menu</h1>
+        </div>
+
+        <div class="menu-layout">
+            <aside class="menu-side">
+                <figure><img src="imagess/35kota.jpg" /><figcaption>R35 Kota</figcaption></figure>
+                <figure><img src="imagess/smallchips.jpg" /><figcaption>Small Chips</figcaption></figure>
+                <figure><img src="imagess/23kota.jpg" /><figcaption>R23 Kota</figcaption></figure>
+                <figure><img src="imagess/beef.jpg" /><figcaption>Vuswa na Beef Stew</figcaption></figure>
+                <figure><img src="imagess/muhori.jpg" /><figcaption>Vuswa na Muhori</figcaption></figure>
+
+            </aside>
+
+            <section class="menu-section">
+                <h2>Menu Items</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Price (R)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Kotas</td><td>Small Kota</td><td>Classic kota with chips, archar, lettuce & polony</td><td>20</td></tr>
+                        <tr><td>Kotas</td><td>Medium Kota</td><td>Extra fillings — archar, polony, half vienna, and lettuce</td><td>23</td></tr>
+                        <tr><td>Kotas</td><td>R25 Kota</td><td>Kota with vienna, cheese, lettuce, archar, chips & sauce</td><td>25</td></tr>
+                        <tr><td>Kotas</td><td>R30 Kota</td><td>Russian, cheese, lettuce, egg, archar, chips & sauce</td><td>30</td></tr>
+                        <tr><td>Kotas</td><td>R35 Kota</td><td>Half Beef patty, russian, cheese, archar, lettuce, egg, chips & sauce</td><td>35</td></tr>
+                        <tr><td>Kotas</td><td>R45 Kota</td><td>Full meal kota — beef patty, russian, vienna, cheese, lettuce, archar, polony, chips & more</td><td>45</td></tr>
+                        <tr><td>Kotas</td><td>R50 Kota</td><td>Large kota with wors, egg, beef patty, cheese, lettuce & extra chips</td><td>50</td></tr>
+                        <tr><td>Chips</td><td>Large Chips</td><td>Large portion of fries</td><td>35</td></tr>
+                        <tr><td>Chips</td><td>Small Chips</td><td>Golden fries</td><td>20</td></tr>
+                        <tr><td>Meal</td><td>Vuswa na Beef Stew</td><td>Beef stew & pap with 2 sides (Fri & Sat only)</td><td>60</td></tr>
+                        <tr><td>Meal</td><td>Vuswa na Muhori</td><td>Pap with tripe & 2 sides (Fri only)</td><td>60</td></tr>
+                        <tr><td>Meal</td><td>Vuswa na Wors</td><td>Pap with wors & 2 sides</td><td>40</td></tr>
+                        <tr><td>Meal</td><td>Vuswa na Steak</td><td>Pap with grilled steak & 2 sides</td><td>60</td></tr>
+                        <tr><td>Drinks</td><td>Soft Drink</td><td>Coke / Fanta / Sprite / Stoney</td><td>20</td></tr>
+                        <tr><td>Drinks</td><td>Water</td><td>Still or Sparkling</td><td>15</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+
+
+            <aside class="menu-side">
+
+                <figure><img src="imagess/45kota.jpg" /><figcaption>R45 Kota</figcaption></figure>
+                <figure><img src="imagess/R50Kota.jpg" /><figcaption>R50 Kota</figcaption></figure>
+                <figure><img src="imagess/LargeChips.jpg" /><figcaption>Large Chips</figcaption></figure>
+                <figure><img src="imagess/Manqina.jpg" /><figcaption>Vuswa na Manqina</figcaption></figure>
+                <figure><img src="imagess/steak.jpg" /><figcaption>Vuswa na Steak</figcaption></figure>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Township Taste. All rights reserved.</p>
+    </footer>
+</body>
+</html>

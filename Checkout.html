@@ -1,0 +1,546 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Township Taste | Checkout</title>
+    <link rel="stylesheet" href="HomePage Design.css" />
+    <link rel="stylesheet" href="CheckoutPage Design.css" />
+    <style>
+        .receipt-box {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            display: block;
+            text-align: center;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu-selection {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-section {
+            margin-bottom: 25px;
+        }
+
+            .category-section h3 {
+                color: #b40000;
+                border-bottom: 2px solid #b40000;
+                padding-bottom: 5px;
+                margin-bottom: 15px;
+            }
+
+        .item-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .item-desc {
+            font-size: 0.9em;
+            color: #666;
+            margin: 2px 0;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #b40000;
+            margin-right: 15px;
+        }
+
+        .add-btn {
+            background: #b40000;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+            .add-btn:hover {
+                background: #920000;
+            }
+
+        .special-instructions {
+            margin: 20px 0;
+        }
+
+            .special-instructions textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-family: inherit;
+                resize: vertical;
+                min-height: 80px;
+            }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .remove-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+            .remove-btn:hover {
+                background: #cc0000;
+            }
+
+        .payment-options {
+            margin: 20px 0;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .payment-option input {
+                margin-right: 10px;
+            }
+
+            .payment-option.selected {
+                border-color: #b40000;
+                background-color: #fff5f5;
+            }
+
+        .delivery-fee {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Home Page.html">Home</a>
+            <a href="Menu.html">Menu</a>
+            <a href="Checkout.html" class="active">Checkout</a>
+            
+            <a href="ContactPage.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="checkout-container">
+            <h1>Checkout</h1>
+
+            <!-- Menu Selection Section -->
+            <div class="menu-selection">
+                <h2>Select Your Items</h2>
+
+                <!-- Kotas Category -->
+                <div class="category-section">
+                    <h3>🍔 Kotas</h3>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Small Kota</div>
+                            <div class="item-desc">Classic kota with chips, archar, lettuce & polony</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R20</span>
+                            <button class="add-btn" onclick="addToCart('Small Kota', 20)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Medium Kota</div>
+                            <div class="item-desc">Extra fillings — archar, polony, half vienna, and lettuce</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R23</span>
+                            <button class="add-btn" onclick="addToCart('Medium Kota', 23)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">R25 Kota</div>
+                            <div class="item-desc">Kota with vienna, cheese, lettuce, archar, chips & sauce</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R25</span>
+                            <button class="add-btn" onclick="addToCart('R25 Kota', 25)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">R30 Kota</div>
+                            <div class="item-desc">Russian, cheese, lettuce, egg, archar, chips & sauce</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R30</span>
+                            <button class="add-btn" onclick="addToCart('R30 Kota', 30)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">R35 Kota</div>
+                            <div class="item-desc">Half Beef patty, russian, cheese, archar, lettuce, egg, chips & sauce</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R35</span>
+                            <button class="add-btn" onclick="addToCart('R35 Kota', 35)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">R45 Kota</div>
+                            <div class="item-desc">Full meal kota — beef patty, russian, vienna, cheese, lettuce, archar, polony, chips & more</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R45</span>
+                            <button class="add-btn" onclick="addToCart('R45 Kota', 45)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">R50 Kota</div>
+                            <div class="item-desc">Large kota with wors, egg, beef patty, cheese, lettuce & extra chips</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R50</span>
+                            <button class="add-btn" onclick="addToCart('R50 Kota', 50)">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chips Category -->
+                <div class="category-section">
+                    <h3>🍟 Chips</h3>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Large Chips</div>
+                            <div class="item-desc">Large portion of fries</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R35</span>
+                            <button class="add-btn" onclick="addToCart('Large Chips', 35)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Small Chips</div>
+                            <div class="item-desc">Golden fries</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R20</span>
+                            <button class="add-btn" onclick="addToCart('Small Chips', 20)">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meals Category -->
+                <div class="category-section">
+                    <h3>🍽️ Meals</h3>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Vuswa na Beef Stew</div>
+                            <div class="item-desc">Beef stew & pap with 2 sides (Fri & Sat only)</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R60</span>
+                            <button class="add-btn" onclick="addToCart('Vuswa na Beef Stew', 60)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Vuswa na Muhori</div>
+                            <div class="item-desc">Pap with tripe & 2 sides (Fri only)</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R60</span>
+                            <button class="add-btn" onclick="addToCart('Vuswa na Muhori', 60)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Vuswa na Wors</div>
+                            <div class="item-desc">Pap with wors & 2 sides</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R40</span>
+                            <button class="add-btn" onclick="addToCart('Vuswa na Wors', 40)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Vuswa na Steak</div>
+                            <div class="item-desc">Pap with grilled steak & 2 sides</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R60</span>
+                            <button class="add-btn" onclick="addToCart('Vuswa na Steak', 60)">Add</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drinks Category -->
+                <div class="category-section">
+                    <h3>🥤 Drinks</h3>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Soft Drink</div>
+                            <div class="item-desc">Coke / Fanta / Sprite / Stoney</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R20</span>
+                            <button class="add-btn" onclick="addToCart('Soft Drink', 20)">Add</button>
+                        </div>
+                    </div>
+                    <div class="item-option">
+                        <div class="item-info">
+                            <div class="item-name">Water</div>
+                            <div class="item-desc">Still or Sparkling</div>
+                        </div>
+                        <div class="item-controls">
+                            <span class="item-price">R15</span>
+                            <button class="add-btn" onclick="addToCart('Water', 15)">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Order Section -->
+            <h2>Your Order</h2>
+            <div id="cart-items"><p>No items selected yet.</p></div>
+            <div class="total"><span>Total:</span> <span id="total-amount">R0</span></div>
+
+            <!-- Special Instructions -->
+            <div class="special-instructions">
+                <label for="instructions">Special Instructions (Sauces to add/remove, allergies, etc.)</label>
+                <textarea id="instructions" placeholder="E.g.: Add extra atchar, remove lettuce, add cheese, mild spice..."></textarea>
+            </div>
+
+            <!-- Customer Details -->
+            <h2>Order Details</h2>
+            <form id="order-form">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="e.g. 081 841 6306" required>
+
+                <label>Order Type</label>
+                <select id="orderType" required>
+                    <option value="">Select</option>
+                    <option value="pickup">Pickup</option>
+                    <option value="delivery">Delivery (within 3 km)</option>
+                </select>
+
+                <div id="address-section" style="display:none;">
+                    <label>Delivery Address</label>
+                    <input type="text" id="address" placeholder="Street, suburb" />
+                    <small class="delivery-fee">Delivery fee: R15 (added to total)</small>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="payment-options">
+                    <label>Payment Method</label>
+                    <div class="payment-option" onclick="selectPayment('whatsapp')">
+                        <input type="radio" name="payment" value="whatsapp" id="pay-whatsapp">
+                        <label for="pay-whatsapp">Pay via WhatsApp</label>
+                    </div>
+                    <div class="payment-option" onclick="selectPayment('delivery')">
+                        <input type="radio" name="payment" value="delivery" id="pay-delivery">
+                        <label for="pay-delivery">Pay on Delivery (Cash)</label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn" onclick="generateReceipt()">Generate Receipt</button>
+            </form>
+
+            <div id="receipt" class="receipt-box" style="display:none;"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Township Taste. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let selectedPayment = '';
+
+        function addToCart(itemName, price) {
+            cart.push({ item: itemName, price: price });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+
+            // Show confirmation
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Added!';
+            btn.style.background = '#25D366';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '#b40000';
+            }, 1000);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+        }
+
+        function updateCart() {
+            const container = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('total-amount');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p>No items selected yet.</p>';
+                totalDisplay.textContent = 'R0';
+                return;
+            }
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                        <div>
+                            <strong>${item.item}</strong> - R${item.price}
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                    `;
+                container.appendChild(div);
+                total += item.price;
+            });
+            totalDisplay.textContent = 'R' + total;
+        }
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            document.querySelector(`input[value="${method}"]`).checked = true;
+        }
+
+        function generateReceipt() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const orderType = document.getElementById('orderType').value;
+            const address = document.getElementById('address').value;
+            const instructions = document.getElementById('instructions').value;
+
+            if (!name || !phone || !orderType) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            if (orderType === 'delivery' && !address) {
+                alert('Please provide a delivery address.');
+                return;
+            }
+            if (cart.length === 0) {
+                alert('Please add at least one item to your order.');
+                return;
+            }
+            if (!selectedPayment) {
+                alert('Please select a payment method.');
+                return;
+            }
+
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            // Add delivery fee if delivery
+            let deliveryFee = 0;
+            if (orderType === 'delivery') {
+                deliveryFee = 15;
+                total += deliveryFee;
+            }
+
+            let itemsList = cart.map(i => `- ${i.item} (R${i.price})`).join('\n');
+
+            let receiptText = `🍽️ TOWNSHIP TASTE ORDER 🍽️\n\n` +
+                `👤 Name: ${name}\n` +
+                `📞 Phone: ${phone}\n` +
+                `📦 Order Type: ${orderType.toUpperCase()}\n` +
+                `${orderType === 'delivery' ? '📍 Address: ' + address + '\n' : ''}` +
+                `💳 Payment: ${selectedPayment === 'whatsapp' ? 'Pay via WhatsApp' : 'Cash on Delivery'}\n` +
+                `${instructions ? '📝 Special Instructions: ' + instructions + '\n' : ''}\n` +
+                `🛒 ITEMS:\n${itemsList}\n` +
+                `${deliveryFee > 0 ? `🚚 Delivery Fee: R${deliveryFee}\n` : ''}` +
+                `💰 TOTAL: R${total}\n\n` +
+                `Thank you for your order! 🎉\n` +
+                `We'll contact you shortly to confirm.`;
+
+            // Your WhatsApp number
+            const whatsappNumber = '27818416306'; // Remove the 0 and add 27 for South Africa
+            const encoded = encodeURIComponent(receiptText);
+
+            // Direct WhatsApp link to your number
+            const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encoded}`;
+
+            document.getElementById('receipt').style.display = 'block';
+            document.getElementById('receipt').innerHTML = `
+                    <h3>Order Summary</h3>
+                    <pre style="white-space: pre-wrap; font-family: inherit;">${receiptText}</pre>
+                    <a href="${whatsappLink}" target="_blank" class="btn-whatsapp">
+                        📱 Send Order via WhatsApp to Township Taste
+                    </a>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        Click the button above to send this order directly to our WhatsApp (081 841 6306)
+                    </p>
+                `;
+        }
+
+        document.getElementById('orderType').addEventListener('change', e => {
+            const addressSection = document.getElementById('address-section');
+            addressSection.style.display = e.target.value === 'delivery' ? 'block' : 'none';
+
+            // Update total when delivery is selected/deselected
+            updateCart();
+        });
+
+        // Load cart on page load
+        updateCart();
+    </script>
+</body>
+</html>
