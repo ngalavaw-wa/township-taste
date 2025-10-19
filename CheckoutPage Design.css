@@ -1,0 +1,145 @@
+﻿:root {
+    --red: #b02929;
+    --white: #fff;
+    --gray: #555;
+    --black: #222;
+    --radius: 10px;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    background: var(--white);
+    color: var(--black);
+    line-height: 1.6;
+}
+
+header nav {
+    background-color: var(--red);
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+nav a {
+    color: var(--white);
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+    nav a:hover,
+    nav a.active {
+        color: #fffddd;
+        border-bottom: 2px solid var(--white);
+    }
+
+.checkout-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 50px auto;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 40px;
+}
+
+h1, h2 {
+    color: var(--red);
+    border-bottom: 2px solid var(--red);
+    padding-bottom: 6px;
+    font-family: "Playfair Display", serif;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1em;
+}
+
+    select:hover, input:hover {
+        border-color: var(--red);
+    }
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .cart-item span {
+        font-size: 1.05em;
+        color: var(--black);
+    }
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--black);
+}
+
+form {
+    margin-top: 30px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.btn {
+    flex: 1;
+    text-align: center;
+    background: var(--red);
+    color: var(--white);
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+    .btn:hover {
+        background: #941f1f;
+    }
+
+    .btn.clear {
+        background: #777;
+    }
+
+        .btn.clear:hover {
+            background: #555;
+        }
+
+footer {
+    background: var(--red);
+    color: var(--white);
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 50px;
+    font-size: 0.9rem;
+}
