@@ -401,7 +401,7 @@
         <p>© 2025 Township Taste. All rights reserved.</p>
     </footer>
 
-    <script>
+   <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let selectedPayment = '';
 
@@ -433,7 +433,7 @@
         } else if (subtotal >= 50) {
             return 10; // R10 for orders R50 to R99.99
         } else {
-            return 15; // R15 for orders below R50
+            return 0; // FREE delivery for orders below R50
         }
     }
 
@@ -475,11 +475,11 @@
             const deliveryFeeElement = document.querySelector('.delivery-fee');
             if (deliveryFeeElement) {
                 if (subtotal >= 100) {
-                    deliveryFeeElement.textContent = 'Delivery fee: R15 (Free delivery for orders R100+)';
+                    deliveryFeeElement.textContent = 'Delivery fee: R15 (Standard fee for orders R100+)';
                 } else if (subtotal >= 50) {
                     deliveryFeeElement.textContent = 'Delivery fee: R10 (Discounted for orders R50+)';
                 } else {
-                    deliveryFeeElement.textContent = 'Delivery fee: R15';
+                    deliveryFeeElement.textContent = 'Delivery fee: FREE 🎉 (For orders below R50)';
                 }
             }
         }
@@ -493,7 +493,7 @@
                 </div>
                 <div class="cart-item">
                     <div>Delivery Fee</div>
-                    <div>R${deliveryFee}</div>
+                    <div>${deliveryFee === 0 ? 'FREE 🎉' : 'R' + deliveryFee}</div>
                 </div>
             `;
         }
@@ -554,7 +554,7 @@
             } else if (subtotal >= 50) {
                 deliveryExplanation = '🚚 Delivery: R10 (Discounted - orders R50+)';
             } else {
-                deliveryExplanation = '🚚 Delivery: R15 (Standard fee)';
+                deliveryExplanation = '🚚 Delivery: FREE 🎉';
             }
         }
 
@@ -567,7 +567,7 @@
                         `${instructions ? '📝 Special Instructions: ' + instructions + '\n' : ''}\n` +
                         `🛒 ITEMS:\n${itemsList}\n\n` +
                         `💰 SUBTOTAL: R${subtotal}\n` +
-                        `${deliveryFee > 0 ? deliveryExplanation + '\n' : ''}` +
+                        `${deliveryFee > 0 ? deliveryExplanation + '\n' : deliveryExplanation + '\n'}` +
                         `💰 TOTAL: R${total}\n\n` +
                         `🎉 Thank you for your order!\n` +
                         `We'll contact you shortly to confirm.`;
@@ -608,7 +608,7 @@
             } else if (subtotal >= 50) {
                 deliveryFeeElement.textContent = 'Delivery fee: R10 (Discounted - orders R50 to R99)';
             } else {
-                deliveryFeeElement.textContent = 'Delivery fee: R15 (Standard fee)';
+                deliveryFeeElement.textContent = 'Delivery fee: FREE 🎉 (For orders below R50)';
             }
         }
         
@@ -622,4 +622,5 @@
 </body>
 
 </html>
+
 
