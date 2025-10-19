@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -152,6 +152,84 @@
             font-size: 0.9em;
             margin-left: 10px;
         }
+
+        /* Popup Modal Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+            .close-popup:hover {
+                color: #b40000;
+            }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+            .popup-buttons .btn {
+                flex: 1;
+                text-align: center;
+            }
     </style>
 </head>
 <body>
@@ -160,8 +238,7 @@
             <a href="index.html">Home</a>
             <a href="Menu.html">Menu</a>
             <a href="Checkout.html" class="active">Checkout</a>
-            
-            
+            <a href="ContactPage.html">Contact</a>
         </nav>
     </header>
 
@@ -393,7 +470,20 @@
                 <button type="button" class="btn" onclick="generateReceipt()">Generate Receipt</button>
             </form>
 
-            <div id="receipt" class="receipt-box" style="display:none;"></div>
+            <!-- Popup Modal for Order Summary -->
+            <div id="receipt-popup" class="popup-overlay">
+                <div class="popup-content">
+                    <button class="close-popup" onclick="closePopup()">×</button>
+                    <h2>Order Summary</h2>
+                    <div id="popup-receipt-content"></div>
+                    <div class="popup-buttons">
+                        <button class="btn" onclick="closePopup()">Edit Order</button>
+                        <a id="popup-whatsapp-link" class="btn-whatsapp" target="_blank" style="display: none;">
+                            📱 Send via WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -401,226 +491,259 @@
         <p>© 2025 Township Taste. All rights reserved.</p>
     </footer>
 
-   <script>
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let selectedPayment = '';
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let selectedPayment = '';
+        let currentReceiptText = '';
 
-    function addToCart(itemName, price) {
-        cart.push({ item: itemName, price: price });
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCart();
-        
-        // Show confirmation
-        const btn = event.target;
-        const originalText = btn.textContent;
-        btn.textContent = 'Added!';
-        btn.style.background = '#25D366';
-        setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = '#b40000';
-        }, 1000);
-    }
+        function addToCart(itemName, price) {
+            cart.push({ item: itemName, price: price });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
 
-    function removeFromCart(index) {
-        cart.splice(index, 1);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCart();
-    }
-
-    function calculateDeliveryFee(subtotal) {
-        if (subtotal >= 100) {
-            return 15; // R15 for orders R100 and above
-        } else if (subtotal >= 50) {
-            return 10; // R10 for orders R50 to R99.99
-        } else {
-            return 0; // FREE delivery for orders below R50
+            // Show confirmation
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Added!';
+            btn.style.background = '#25D366';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '#b40000';
+            }, 1000);
         }
-    }
 
-    function updateCart() {
-        const container = document.getElementById('cart-items');
-        const totalDisplay = document.getElementById('total-amount');
-        const orderType = document.getElementById('orderType').value;
-        container.innerHTML = '';
-        
-        if (cart.length === 0) {
-            container.innerHTML = '<p>No items selected yet.</p>';
-            totalDisplay.textContent = 'R0';
-            return;
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
         }
-        
-        let subtotal = 0;
-        cart.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'cart-item';
-            div.innerHTML = `
-                <div>
-                    <strong>${item.item}</strong> - R${item.price}
-                </div>
-                <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
-            `;
-            container.appendChild(div);
-            subtotal += item.price;
+
+        function calculateDeliveryFee(subtotal) {
+            if (subtotal >= 100) {
+                return 15; // R15 for orders R100 and above
+            } else if (subtotal >= 50) {
+                return 10; // R10 for orders R50 to R99.99
+            } else {
+                return 0; // FREE delivery for orders below R50
+            }
+        }
+
+        function updateCart() {
+            const container = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('total-amount');
+            const orderType = document.getElementById('orderType').value;
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p>No items selected yet.</p>';
+                totalDisplay.textContent = 'R0';
+                return;
+            }
+
+            let subtotal = 0;
+            cart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                        <div>
+                            <strong>${item.item}</strong> - R${item.price}
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                    `;
+                container.appendChild(div);
+                subtotal += item.price;
+            });
+
+            // Calculate delivery fee if delivery is selected
+            let deliveryFee = 0;
+            let total = subtotal;
+
+            if (orderType === 'delivery') {
+                deliveryFee = calculateDeliveryFee(subtotal);
+                total = subtotal + deliveryFee;
+
+                // Update delivery fee message
+                const deliveryFeeElement = document.querySelector('.delivery-fee');
+                if (deliveryFeeElement) {
+                    if (subtotal >= 100) {
+                        deliveryFeeElement.textContent = 'Delivery fee: R15 (Standard fee for orders R100+)';
+                    } else if (subtotal >= 50) {
+                        deliveryFeeElement.textContent = 'Delivery fee: R10 (Discounted for orders R50+)';
+                    } else {
+                        deliveryFeeElement.textContent = 'Delivery fee: FREE 🎉 (For orders below R50)';
+                    }
+                }
+            }
+
+            // Display subtotal and total
+            if (orderType === 'delivery') {
+                container.innerHTML += `
+                        <div class="cart-item" style="border-top: 2px solid #eee; padding-top: 15px;">
+                            <div><strong>Subtotal</strong></div>
+                            <div><strong>R${subtotal}</strong></div>
+                        </div>
+                        <div class="cart-item">
+                            <div>Delivery Fee</div>
+                            <div>${deliveryFee === 0 ? 'FREE 🎉' : 'R' + deliveryFee}</div>
+                        </div>
+                    `;
+            }
+
+            totalDisplay.textContent = 'R' + total;
+        }
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            document.querySelector(`input[value="${method}"]`).checked = true;
+        }
+
+        function generateReceipt() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const orderType = document.getElementById('orderType').value;
+            const address = document.getElementById('address').value;
+            const instructions = document.getElementById('instructions').value;
+
+            if (!name || !phone || !orderType) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            if (orderType === 'delivery' && !address) {
+                alert('Please provide a delivery address.');
+                return;
+            }
+            if (cart.length === 0) {
+                alert('Please add at least one item to your order.');
+                return;
+            }
+            if (!selectedPayment) {
+                alert('Please select a payment method.');
+                return;
+            }
+
+            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+
+            // Calculate delivery fee
+            let deliveryFee = 0;
+            if (orderType === 'delivery') {
+                deliveryFee = calculateDeliveryFee(subtotal);
+            }
+
+            let total = subtotal + deliveryFee;
+
+            let itemsList = cart.map(i => `- ${i.item} (R${i.price})`).join('\n');
+
+            // Delivery fee explanation
+            let deliveryExplanation = '';
+            if (orderType === 'delivery') {
+                if (subtotal >= 100) {
+                    deliveryExplanation = '🚚 Delivery: R15 (Standard fee)';
+                } else if (subtotal >= 50) {
+                    deliveryExplanation = '🚚 Delivery: R10 (Discounted - orders R50+)';
+                } else {
+                    deliveryExplanation = '🚚 Delivery: FREE 🎉';
+                }
+            }
+
+            currentReceiptText = `🍽️ TOWNSHIP TASTE ORDER 🍽️\n\n` +
+                `👤 Name: ${name}\n` +
+                `📞 Phone: ${phone}\n` +
+                `📦 Order Type: ${orderType.toUpperCase()}\n` +
+                `${orderType === 'delivery' ? '📍 Address: ' + address + '\n' : ''}` +
+                `💳 Payment: ${selectedPayment === 'whatsapp' ? 'Pay via WhatsApp' : 'Cash on Delivery'}\n` +
+                `${instructions ? '📝 Special Instructions: ' + instructions + '\n' : ''}\n` +
+                `🛒 ITEMS:\n${itemsList}\n\n` +
+                `💰 SUBTOTAL: R${subtotal}\n` +
+                `${deliveryFee > 0 ? deliveryExplanation + '\n' : deliveryExplanation + '\n'}` +
+                `💰 TOTAL: R${total}\n\n` +
+                `🎉 Thank you for your order!\n` +
+                `We'll contact you shortly to confirm.`;
+
+            // Your WhatsApp number
+            const whatsappNumber = '27818416306';
+            const encoded = encodeURIComponent(currentReceiptText);
+
+            // Direct WhatsApp link to your number
+            const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encoded}`;
+
+            // Show popup
+            showPopup(currentReceiptText, whatsappLink);
+        }
+
+        function showPopup(receiptText, whatsappLink) {
+            const popup = document.getElementById('receipt-popup');
+            const content = document.getElementById('popup-receipt-content');
+            const whatsappBtn = document.getElementById('popup-whatsapp-link');
+
+            // Format receipt text for better display
+            const formattedText = receiptText.replace(/\n/g, '<br>');
+
+            content.innerHTML = `
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <pre style="white-space: pre-wrap; font-family: inherit; margin: 0; font-size: 14px; line-height: 1.4;">${receiptText}</pre>
+                    </div>
+                    <p style="text-align: center; color: #666; font-size: 0.9em;">
+                        Review your order above, then click "Send via WhatsApp" to confirm.
+                    </p>
+                `;
+
+            whatsappBtn.href = whatsappLink;
+            whatsappBtn.style.display = 'block';
+
+            popup.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('receipt-popup');
+            popup.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        // Close popup when clicking outside content
+        document.getElementById('receipt-popup').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closePopup();
+            }
         });
 
-        // Calculate delivery fee if delivery is selected
-        let deliveryFee = 0;
-        let total = subtotal;
-        
-        if (orderType === 'delivery') {
-            deliveryFee = calculateDeliveryFee(subtotal);
-            total = subtotal + deliveryFee;
-            
+        // Close popup with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closePopup();
+            }
+        });
+
+        document.getElementById('orderType').addEventListener('change', e => {
+            const addressSection = document.getElementById('address-section');
+            const isDelivery = e.target.value === 'delivery';
+            addressSection.style.display = isDelivery ? 'block' : 'none';
+
             // Update delivery fee message
-            const deliveryFeeElement = document.querySelector('.delivery-fee');
-            if (deliveryFeeElement) {
+            if (isDelivery) {
+                const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+                const deliveryFee = calculateDeliveryFee(subtotal);
+                const deliveryFeeElement = document.querySelector('.delivery-fee');
+
                 if (subtotal >= 100) {
                     deliveryFeeElement.textContent = 'Delivery fee: R15 (Standard fee for orders R100+)';
                 } else if (subtotal >= 50) {
-                    deliveryFeeElement.textContent = 'Delivery fee: R10 (Discounted for orders R50+)';
+                    deliveryFeeElement.textContent = 'Delivery fee: R10 (Discounted - orders R50 to R99)';
                 } else {
                     deliveryFeeElement.textContent = 'Delivery fee: FREE 🎉 (For orders below R50)';
                 }
             }
-        }
 
-        // Display subtotal and total
-        if (orderType === 'delivery') {
-            container.innerHTML += `
-                <div class="cart-item" style="border-top: 2px solid #eee; padding-top: 15px;">
-                    <div><strong>Subtotal</strong></div>
-                    <div><strong>R${subtotal}</strong></div>
-                </div>
-                <div class="cart-item">
-                    <div>Delivery Fee</div>
-                    <div>${deliveryFee === 0 ? 'FREE 🎉' : 'R' + deliveryFee}</div>
-                </div>
-            `;
-        }
-        
-        totalDisplay.textContent = 'R' + total;
-    }
-
-    function selectPayment(method) {
-        selectedPayment = method;
-        document.querySelectorAll('.payment-option').forEach(opt => {
-            opt.classList.remove('selected');
+            // Update cart display with new totals
+            updateCart();
         });
-        event.currentTarget.classList.add('selected');
-        document.querySelector(`input[value="${method}"]`).checked = true;
-    }
 
-    function generateReceipt() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const orderType = document.getElementById('orderType').value;
-        const address = document.getElementById('address').value;
-        const instructions = document.getElementById('instructions').value;
-
-        if (!name || !phone || !orderType) {
-            alert('Please fill in all required fields.');
-            return;
-        }
-        if (orderType === 'delivery' && !address) {
-            alert('Please provide a delivery address.');
-            return;
-        }
-        if (cart.length === 0) {
-            alert('Please add at least one item to your order.');
-            return;
-        }
-        if (!selectedPayment) {
-            alert('Please select a payment method.');
-            return;
-        }
-
-        let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-        
-        // Calculate delivery fee
-        let deliveryFee = 0;
-        if (orderType === 'delivery') {
-            deliveryFee = calculateDeliveryFee(subtotal);
-        }
-        
-        let total = subtotal + deliveryFee;
-
-        let itemsList = cart.map(i => `- ${i.item} (R${i.price})`).join('\n');
-        
-        // Delivery fee explanation
-        let deliveryExplanation = '';
-        if (orderType === 'delivery') {
-            if (subtotal >= 100) {
-                deliveryExplanation = '🚚 Delivery: R15 (Standard fee)';
-            } else if (subtotal >= 50) {
-                deliveryExplanation = '🚚 Delivery: R10 (Discounted - orders R50+)';
-            } else {
-                deliveryExplanation = '🚚 Delivery: FREE 🎉';
-            }
-        }
-
-        let receiptText = `🍽️ TOWNSHIP TASTE ORDER 🍽️\n\n` +
-                        `👤 Name: ${name}\n` +
-                        `📞 Phone: ${phone}\n` +
-                        `📦 Order Type: ${orderType.toUpperCase()}\n` +
-                        `${orderType === 'delivery' ? '📍 Address: ' + address + '\n' : ''}` +
-                        `💳 Payment: ${selectedPayment === 'whatsapp' ? 'Pay via WhatsApp' : 'Cash on Delivery'}\n` +
-                        `${instructions ? '📝 Special Instructions: ' + instructions + '\n' : ''}\n` +
-                        `🛒 ITEMS:\n${itemsList}\n\n` +
-                        `💰 SUBTOTAL: R${subtotal}\n` +
-                        `${deliveryFee > 0 ? deliveryExplanation + '\n' : deliveryExplanation + '\n'}` +
-                        `💰 TOTAL: R${total}\n\n` +
-                        `🎉 Thank you for your order!\n` +
-                        `We'll contact you shortly to confirm.`;
-
-        // Your WhatsApp number
-        const whatsappNumber = '27818416306';
-        const encoded = encodeURIComponent(receiptText);
-        
-        // Direct WhatsApp link to your number
-        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encoded}`;
-
-        document.getElementById('receipt').style.display = 'block';
-        document.getElementById('receipt').innerHTML = `
-            <h3>Order Summary</h3>
-            <pre style="white-space: pre-wrap; font-family: inherit;">${receiptText}</pre>
-            <a href="${whatsappLink}" target="_blank" class="btn-whatsapp">
-                📱 Send Order via WhatsApp to Township Taste
-            </a>
-            <p style="margin-top: 10px; font-size: 0.9em; color: #666;">
-                Click the button above to send this order directly to our WhatsApp (081 841 6306)
-            </p>
-        `;
-    }
-
-    document.getElementById('orderType').addEventListener('change', e => {
-        const addressSection = document.getElementById('address-section');
-        const isDelivery = e.target.value === 'delivery';
-        addressSection.style.display = isDelivery ? 'block' : 'none';
-        
-        // Update delivery fee message
-        if (isDelivery) {
-            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            const deliveryFee = calculateDeliveryFee(subtotal);
-            const deliveryFeeElement = document.querySelector('.delivery-fee');
-            
-            if (subtotal >= 100) {
-                deliveryFeeElement.textContent = 'Delivery fee: R15 (Standard fee for orders R100+)';
-            } else if (subtotal >= 50) {
-                deliveryFeeElement.textContent = 'Delivery fee: R10 (Discounted - orders R50 to R99)';
-            } else {
-                deliveryFeeElement.textContent = 'Delivery fee: FREE 🎉 (For orders below R50)';
-            }
-        }
-        
-        // Update cart display with new totals
+        // Load cart on page load
         updateCart();
-    });
-
-    // Load cart on page load
-    updateCart();
-</script>
+    </script>
 </body>
-
 </html>
-
-
